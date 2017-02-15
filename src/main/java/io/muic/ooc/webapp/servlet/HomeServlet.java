@@ -35,9 +35,4 @@ public class HomeServlet extends HttpServlet {
             resp.sendRedirect("/login");
         }
     }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("do post");
-    }
 }
