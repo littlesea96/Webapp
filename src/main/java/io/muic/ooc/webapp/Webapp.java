@@ -14,10 +14,10 @@ import java.io.File;
  */
 public class Webapp {
 
-    public static final String MYSQL_DRIVER = "com.mysql.jdbc.Driver";
-    public static final String MYSQL_URL = "jdbc:mysql://localhost:3306/webapp?" + "user=root&password=littlesea";
-
     public static void main(String[] args) {
+
+        final String MYSQL_DRIVER = "com.mysql.jdbc.Driver";
+        final String MYSQL_URL = "jdbc:mysql://localhost:3306/webapp?" + "user=root&password=littlesea";
 
         String docBase = "src/main/webapp/";
         Tomcat tomcat = new Tomcat();
