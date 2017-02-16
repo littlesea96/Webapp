@@ -43,7 +43,6 @@ public class LoginServlet extends HttpServlet {
         } else {
             String username = req.getParameter("username");
             String password = securityService.hashPass(req.getParameter("password"));
-            System.out.println(password);
             ResultSet resultSet = databaseService.select("select * from USER_INFO WHERE username = '" +username+ "' AND password = '"+ password + "';");
 
 
