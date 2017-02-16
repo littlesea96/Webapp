@@ -28,10 +28,15 @@ public class DeleteServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String un = req.getParameter("username");
-        req.setAttribute("username",un);
-        RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/confirmDelete.jsp");
-        rd.include(req, resp);
+        boolean authorized = securityService.isAuthorized(req, databaseService);
+        if (authorized) {
+            String un = req.getParameter("username");
+            req.setAttribute("username",un);
+            RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/confirmDelete.jsp");
+            rd.include(req, resp);
+        } else {
+            resp.sendRedirect("/login");
+        }
     }
 
     @Override

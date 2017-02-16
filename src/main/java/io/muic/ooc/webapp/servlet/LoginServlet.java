@@ -37,24 +37,32 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
-        ResultSet resultSet = databaseService.select("select * from USER_INFO WHERE username = '" +username+ "' AND password = '"+ password + "';");
+        boolean authorized = securityService.isAuthorized(req, databaseService);
+        if(authorized){
+            resp.sendRedirect("/user");
+        } else {
+            String username = req.getParameter("username");
+            String password = securityService.hashPass(req.getParameter("password"));
+            System.out.println(password);
+            ResultSet resultSet = databaseService.select("select * from USER_INFO WHERE username = '" +username+ "' AND password = '"+ password + "';");
 
 
-        if (!StringUtils.isBlank(username) && !StringUtils.isBlank(password)) {
-            if(securityService.authenticate(username, password, req, resultSet)){
-                resp.sendRedirect("/");
+            if (!StringUtils.isBlank(username) && !StringUtils.isBlank(password)) {
+                if(securityService.authenticate(username, password, req, resultSet)){
+                    resp.sendRedirect("/");
+                } else {
+                    String error = "Wrong username or password.";
+                    req.setAttribute("error", error);
+                    RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/login.jsp");
+                    rd.include(req, resp);
+                }
             } else {
-                String error = "Wrong username or password.";
+                String error = "Username or password is missing.";
+                req.setAttribute("error", error);
                 RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/login.jsp");
                 rd.include(req, resp);
             }
-        } else {
-            String error = "Username or password is missing.";
-            req.setAttribute("error", error);
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/login.jsp");
-            rd.include(req, resp);
         }
+
     }
 }

@@ -30,21 +30,28 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/register.jsp");
-        rd.include(req, resp);
+        boolean authorized = securityService.isAuthorized(req, databaseService);
+        if (authorized) {
+            RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/register.jsp");
+            rd.include(req, resp);
+        } else {
+            resp.sendRedirect("/login");
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String un = req.getParameter("username");
-        String pw = req.getParameter("password");
-        String nameIn = req.getParameter("name");
-        String surnameIn = req.getParameter("surname");
-        String emailIn = req.getParameter("email");
-        String sql = " insert into USER_INFO (username, password, name, surname, email)"
-                + " values ('" + un +"', '" + pw + "', '"+ nameIn + "', '" + surnameIn + "', '" + emailIn + "')";
+        if(req.getParameter("button").equals("Submit")){
+            String un = req.getParameter("username");
+            String pw = securityService.hashPass(req.getParameter("password"));
+            String nameIn = req.getParameter("name");
+            String surnameIn = req.getParameter("surname");
+            String emailIn = req.getParameter("email");
+            String sql = " insert into USER_INFO (username, password, name, surname, email)"
+                    + " values ('" + un +"', '" + pw + "', '"+ nameIn + "', '" + surnameIn + "', '" + emailIn + "')";
 
-        databaseService.insert(sql);
+            databaseService.insert(sql);
+        }
         resp.sendRedirect("/user");
     }
 }

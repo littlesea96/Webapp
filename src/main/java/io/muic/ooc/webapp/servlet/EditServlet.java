@@ -28,36 +28,42 @@ public class EditServlet extends HttpServlet{
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = req.getParameter("username");
-        String sql = "select * from USER_INFO WHERE username = '" +username+ "';";
-        ResultSet rs = databaseService.select(sql);
-        try {
-            while (rs.next()){
-                String un = rs.getString("username");
-                String name = rs.getString("name");
-                String surname = rs.getString("surname");
-                String email = rs.getString("email");
-                req.setAttribute("username", un);
-                req.setAttribute("name", name);
-                req.setAttribute("surname", surname);
-                req.setAttribute("email", email);
+        boolean authorized = securityService.isAuthorized(req, databaseService);
+        if (authorized) {
+            String username = req.getParameter("username");
+            String sql = "select * from USER_INFO WHERE username = '" +username+ "';";
+            ResultSet rs = databaseService.select(sql);
+            try {
+                while (rs.next()){
+                    String un = rs.getString("username");
+                    String name = rs.getString("name");
+                    String surname = rs.getString("surname");
+                    String email = rs.getString("email");
+                    req.setAttribute("username", un);
+                    req.setAttribute("name", name);
+                    req.setAttribute("surname", surname);
+                    req.setAttribute("email", email);
+                }
+            } catch (Exception e){
+                System.out.println("Cannot get from database.");
             }
-        } catch (Exception e){
-            System.out.println("Cannot get from database.");
+            RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/editUser.jsp");
+            rd.include(req, resp);
+        } else {
+            resp.sendRedirect("/login");
         }
-        RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/editUser.jsp");
-        rd.include(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("do post");
-        String un = req.getParameter("username");
-        String nameIn = req.getParameter("name");
-        String surnameIn = req.getParameter("surname");
-        String emailIn = req.getParameter("email");
-        String sql = "UPDATE USER_INFO SET username = '" + un + "', name = '" + nameIn + "', surname = '" + surnameIn + "', email = '" + emailIn + "' WHERE username = '" + un + "'";
-        databaseService.update(sql);
+        if(req.getParameter("button").equals("save")){
+            String un = req.getParameter("username");
+            String nameIn = req.getParameter("name");
+            String surnameIn = req.getParameter("surname");
+            String emailIn = req.getParameter("email");
+            String sql = "UPDATE USER_INFO SET username = '" + un + "', name = '" + nameIn + "', surname = '" + surnameIn + "', email = '" + emailIn + "' WHERE username = '" + un + "'";
+            databaseService.update(sql);
+        }
         resp.sendRedirect("/user");
     }
 }

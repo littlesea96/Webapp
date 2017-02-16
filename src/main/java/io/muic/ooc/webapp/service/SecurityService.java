@@ -51,14 +51,13 @@ public class SecurityService {
         String hashed = "";
         String salt = "lit@#$%le%$@*)+&";
         hashed = DigestUtils.sha256Hex( password );
-        System.out.println(hashed);
         hashed += salt;
         hashed = DigestUtils.sha256Hex(hashed);
-        System.out.println(hashed);
         return hashed;
     }
 
-    public void logout(HttpServletRequest request){
+    public void logout(HttpServletRequest request, DatabaseService databaseService){
         request.getSession().invalidate();
+        databaseService.close();
     }
 }

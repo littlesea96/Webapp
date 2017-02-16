@@ -3,6 +3,7 @@ package io.muic.ooc.webapp.servlet;
 import io.muic.ooc.webapp.service.DatabaseService;
 import io.muic.ooc.webapp.User;
 import io.muic.ooc.webapp.service.SecurityService;
+import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -34,27 +35,44 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ResultSet rs = databaseService.select("select * from USER_INFO;");
-        List<User> userList = new ArrayList<>();
-        try {
-            while (rs.next()) {
-                User user = new User();
-                user.setUsername(rs.getString("username"));
-                user.setName(rs.getString("name"));
-                user.setSurname(rs.getString("surname"));
-                user.setEmail(rs.getString("email"));
-                userList.add(user);
+        boolean authorized = securityService.isAuthorized(req, databaseService);
+        if (authorized) {
+            ResultSet rs = databaseService.select("select * from USER_INFO;");
+            List<User> userList = new ArrayList<>();
+            String curUser = (String) req.getSession().getAttribute("username");
+            req.setAttribute("curUser", curUser);
+            try {
+                while (rs.next()) {
+                    User user = new User();
+                    String username = rs.getString("username");
+                    user.setUsername(username);
+                    user.setName(rs.getString("name"));
+                    user.setSurname(rs.getString("surname"));
+                    user.setEmail(rs.getString("email"));
+                    userList.add(user);
+                    if(StringUtils.equals(curUser,username)){
+                        req.setAttribute("curUserName", rs.getString("name"));
+                        req.setAttribute("curUserSurname", rs.getString("surname"));
+                    }
+                }
+            } catch (Exception e){
+                System.out.println("Cannot get from DB.");
             }
-        } catch (Exception e){
-            System.out.println("Cannot get from DB.");
+            req.setAttribute("userList", userList);
+            RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/user.jsp");
+            rd.include(req, resp);
+        } else {
+            resp.sendRedirect("/login");
         }
-        req.setAttribute("userList", userList);
-        RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/user.jsp");
-        rd.include(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect("/register");
+        if(req.getParameter("button").equals("Add User")){
+            resp.sendRedirect("/register");
+        } else {
+            securityService.logout(req, databaseService);
+            resp.sendRedirect("/login");
+        }
     }
 }
