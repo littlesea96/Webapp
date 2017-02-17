@@ -54,7 +54,7 @@ public class RegisterServlet extends HttpServlet {
             databaseService.insert(sql);
             resp.sendRedirect("/user");
         } catch (Exception e){
-            String error = "This username is already be used.";
+            String error = "This username is already used.";
             req.setAttribute("error", error);
             RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/register.jsp");
             rd.include(req, resp);
