@@ -8,4 +8,4 @@ target/
 # Mac
 *.DS_Store
 
-tomcat.8082
+tomcat.8082/
