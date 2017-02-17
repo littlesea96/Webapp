@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.ResultSet;
 
 import static io.muic.ooc.webapp.Webapp.*;
 
@@ -46,9 +47,17 @@ public class RegisterServlet extends HttpServlet {
         String nameIn = req.getParameter("name");
         String surnameIn = req.getParameter("surname");
         String emailIn = req.getParameter("email");
-        String sql = " insert into USER_INFO (username, password, name, surname, email)"
-                + " values ('" + un +"', '" + pw + "', '"+ nameIn + "', '" + surnameIn + "', '" + emailIn + "')";
-        databaseService.insert(sql);
-        resp.sendRedirect("/user");
+
+        try {
+            String sql = " insert into USER_INFO (username, password, name, surname, email)"
+                    + " values ('" + un + "', '" + pw + "', '" + nameIn + "', '" + surnameIn + "', '" + emailIn + "')";
+            databaseService.insert(sql);
+            resp.sendRedirect("/user");
+        } catch (Exception e){
+            String error = "This username is already be used.";
+            req.setAttribute("error", error);
+            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/register.jsp");
+            rd.include(req, resp);
+        }
     }
 }

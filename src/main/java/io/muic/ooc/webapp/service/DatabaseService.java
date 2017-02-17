@@ -42,13 +42,10 @@ public class DatabaseService {
         return resultSet;
     }
 
-    public void insert(String sqlCommand){
-        try{
-            PreparedStatement preparedStmt = connection.prepareStatement(sqlCommand);
-            preparedStmt.execute();
-        } catch (Exception e){
-            System.out.println("cannot insert into database.");
-        }
+    public void insert(String sqlCommand) throws Exception{
+        PreparedStatement preparedStmt = connection.prepareStatement(sqlCommand);
+        preparedStmt.execute();
+
     }
 
     public void delete(String sqlCommand){

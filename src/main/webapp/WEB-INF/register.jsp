@@ -10,7 +10,7 @@
         <form action="/register" method="post">
             Username: <input type="text" name="username" required="required">
             <br>
-            Password: <input type="text" name="password" required="required">
+            Password: <input type="password" name="password" required="required">
             <br>
             Name: <input type="text" name="name">
             <br>
@@ -18,6 +18,7 @@
             <br>
             Email: <input type="text" name="email">
             <br><br>
+            <p>${error}</p>
             <input class="btn btn-warning" type="submit" name="button" value="Submit">
         </form>
         <form action="/user" method="get">
