@@ -15,9 +15,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.muic.ooc.webapp.Webapp.MYSQL_DRIVER;
-import static io.muic.ooc.webapp.Webapp.MYSQL_URL;
-
 /**
  * Created by Sea on 2/14/17.
  */

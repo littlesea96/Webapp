@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Hello ${curUserName} ${curUserSurname} </h1>
+        <h1>Hello ${curUser}</h1>
         <table  class="table table-striped center">
             <thead>
             <tr>

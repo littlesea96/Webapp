@@ -56,14 +56,12 @@ public class EditServlet extends HttpServlet{
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(req.getParameter("button").equals("save")){
-            String un = req.getParameter("username");
-            String nameIn = req.getParameter("name");
-            String surnameIn = req.getParameter("surname");
-            String emailIn = req.getParameter("email");
-            String sql = "UPDATE USER_INFO SET username = '" + un + "', name = '" + nameIn + "', surname = '" + surnameIn + "', email = '" + emailIn + "' WHERE username = '" + un + "'";
-            databaseService.update(sql);
-        }
+        String un = req.getParameter("username");
+        String nameIn = req.getParameter("name");
+        String surnameIn = req.getParameter("surname");
+        String emailIn = req.getParameter("email");
+        String sql = "UPDATE USER_INFO SET username = '" + un + "', name = '" + nameIn + "', surname = '" + surnameIn + "', email = '" + emailIn + "' WHERE username = '" + un + "'";
+        databaseService.update(sql);
         resp.sendRedirect("/user");
     }
 }

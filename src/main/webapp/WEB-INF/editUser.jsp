@@ -16,8 +16,10 @@
             <br>
             Email: <input type="text" name="email" value="${email}">
             <br><br>
-            <input class="btn btn-primary" type="submit" name="button" value="back">
             <input class="btn btn-warning" type="submit" name="button" value="save">
+        </form>
+        <form action="/user" method="get">
+            <input class="btn btn-primary" type="submit" name="button" value="back">
         </form>
     </div>
 </body>

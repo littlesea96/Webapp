@@ -41,17 +41,14 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(req.getParameter("button").equals("Submit")){
-            String un = req.getParameter("username");
-            String pw = securityService.hashPass(req.getParameter("password"));
-            String nameIn = req.getParameter("name");
-            String surnameIn = req.getParameter("surname");
-            String emailIn = req.getParameter("email");
-            String sql = " insert into USER_INFO (username, password, name, surname, email)"
-                    + " values ('" + un +"', '" + pw + "', '"+ nameIn + "', '" + surnameIn + "', '" + emailIn + "')";
-
-            databaseService.insert(sql);
-        }
+        String un = req.getParameter("username");
+        String pw = securityService.hashPass(req.getParameter("password"));
+        String nameIn = req.getParameter("name");
+        String surnameIn = req.getParameter("surname");
+        String emailIn = req.getParameter("email");
+        String sql = " insert into USER_INFO (username, password, name, surname, email)"
+                + " values ('" + un +"', '" + pw + "', '"+ nameIn + "', '" + surnameIn + "', '" + emailIn + "')";
+        databaseService.insert(sql);
         resp.sendRedirect("/user");
     }
 }

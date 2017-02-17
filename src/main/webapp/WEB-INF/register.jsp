@@ -8,9 +8,9 @@
     <div class="container">
         <h2>Register</h2>
         <form action="/register" method="post">
-            Username: <input type="text" name="username">
+            Username: <input type="text" name="username" required="required">
             <br>
-            Password: <input type="text" name="password">
+            Password: <input type="text" name="password" required="required">
             <br>
             Name: <input type="text" name="name">
             <br>
@@ -18,8 +18,10 @@
             <br>
             Email: <input type="text" name="email">
             <br><br>
-            <input class="btn btn-primary" type="submit" name="button" value="Back">
             <input class="btn btn-warning" type="submit" name="button" value="Submit">
+        </form>
+        <form action="/user" method="get">
+            <input class="btn btn-primary" type="submit" name="button" value="Back">
         </form>
     </div>
 </body>
