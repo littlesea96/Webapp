@@ -58,6 +58,5 @@ public class SecurityService {
 
     public void logout(HttpServletRequest request, DatabaseService databaseService){
         request.getSession().invalidate();
-        databaseService.close();
     }
 }

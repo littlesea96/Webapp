@@ -56,8 +56,9 @@ public class RegisterServlet extends HttpServlet {
         } catch (Exception e){
             String error = "This username is already used.";
             req.setAttribute("error", error);
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/register.jsp");
-            rd.include(req, resp);
+//            ReqestDispatcher rd = req.getRequestDispatcher("WEB-INF/register.jsp");
+//            rd.include(req, resp);
+            doGet(req, resp);
         }
     }
 }
